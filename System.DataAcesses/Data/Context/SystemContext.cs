@@ -1,25 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.DataAcesses.Models;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace System.DataAcesses.Data.Context
 {
-    public class SystemContext : DbContext
+    public class SystemContext : IdentityDbContext<Company, IdentityRole<Guid>, Guid>
     {
-        public SystemContext(DbContextOptions<SystemContext> options) :base(options)
+        public SystemContext(DbContextOptions<SystemContext> options) : base(options)
         {
-            
-        }
-        public DbSet<Company> Companies { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Company>().HasIndex(c => c.Email).IsUnique();
         }
 
+        public DbSet<Otp> Otps { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Otp>()
+                .HasOne(o => o.Company)
+                .WithMany(c => c.Otps)
+                .HasForeignKey(o => o.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Company>().ToTable("Companies");
+
+        }
     }
 }

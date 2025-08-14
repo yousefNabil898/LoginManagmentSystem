@@ -1,7 +1,5 @@
 using LoginManagmentSystem;
 using LoginManagmentSystem.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using System.BusinessLogic.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +22,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

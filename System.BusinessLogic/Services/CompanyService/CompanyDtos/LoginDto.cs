@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.BusinessLogic.Dtos
+namespace System.BusinessLogic.Services.CompanyService.CompanyDtos
 {
-    public class SetPasswordDto
+    public class LoginDto
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-
     }
 }

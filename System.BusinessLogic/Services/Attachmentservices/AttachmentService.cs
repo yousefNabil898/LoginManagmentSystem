@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.BusinessLogic.InterFaces;
 
-namespace System.BusinessLogic.Services
+namespace System.BusinessLogic.Services.Attachmentservices
 {
     public class AttachmentService : IAttachmentService
     {
         private readonly List<string> allowedExtensions = new List<string> { ".png", ".jpg", ".jpeg" };
-        private const int maxSize = 2_097_152; 
+        private const int maxSize = 2_097_152;
 
         public async Task<string?> UploadAsync(IFormFile file, string folderName)
         {

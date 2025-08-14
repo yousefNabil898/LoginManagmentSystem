@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.BusinessLogic.Dtos;
-using System.BusinessLogic.InterFaces;
+using System.BusinessLogic.Services.CompanyService;
+using System.BusinessLogic.Services.CompanyService.CompanyDtos;
 using System.DataAcesses.Exceptions;
 using System.Security.Claims;
 
@@ -52,9 +52,10 @@ namespace LoginManagmentSystem.Controllers
             return Ok(result);
         }       
         [HttpGet("profile")]
-        public async Task<IActionResult> GetProfile()
+        public async Task<ActionResult<CompanyProfileDto>> GetProfile()
         {
-            var companyIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var companyIdString = User.Claims.FirstOrDefault(c => c.Type == "CompanyId")?.Value;
+
             if (string.IsNullOrEmpty(companyIdString) || !Guid.TryParse(companyIdString, out Guid companyId))
             {
                 return Unauthorized("Token is invalid");
@@ -66,8 +67,9 @@ namespace LoginManagmentSystem.Controllers
 
             return Ok(profile);
         }
+
         [HttpPost("resendOtp")]
-        public async Task<IActionResult> ResendOtp([FromBody] EmailDto email)
+        public async Task<IActionResult> ResendOtp([FromBody]CompanyEmail email)
         {
             var result = await _companyService.ResendOtpAsync(email);
             if (!result)
@@ -75,5 +77,16 @@ namespace LoginManagmentSystem.Controllers
 
             return Ok(result);
         }
+        [HttpPost("sendOtp")]
+        public async Task<IActionResult> SendOtp([FromBody]CompanyEmail email)
+        {
+            var result = await _companyService.SendRegistarionOtp(email);
+            if (!result.Success)
+
+                return BadRequest(new { succses = false, message = "The code could not be rescued, check the mail or you're definitely already." });
+
+            return Ok(result);
+        }
+
     }
 }
