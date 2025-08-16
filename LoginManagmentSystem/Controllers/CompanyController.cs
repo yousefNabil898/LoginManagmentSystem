@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.BusinessLogic.Services.CompanyService;
 using System.BusinessLogic.Services.CompanyService.CompanyDtos;
 using System.DataAcesses.Exceptions;
@@ -50,7 +51,8 @@ namespace LoginManagmentSystem.Controllers
                 return Unauthorized("Entry data is incorrect or not confirmed email.");
 
             return Ok(result);
-        }       
+        }
+        [Authorize]
         [HttpGet("profile")]
         public async Task<ActionResult<CompanyProfileDto>> GetProfile()
         {
